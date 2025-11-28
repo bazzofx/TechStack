@@ -14,7 +14,8 @@ import {
   Copy,
   Check,
   Download,
-  ArrowLeft
+  ArrowLeft,
+  AlertTriangle
 } from 'lucide-react';
 import { TECH_STACK_DATA } from './constants';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -139,9 +140,11 @@ const CategoryPage = () => {
                 <div className="flex flex-wrap gap-2">
                      {/* Show tags for what data is available */}
                      {Object.keys(data[techName]).slice(0, 4).map(key => (
-                         <span key={key} className="text-sm px-2.5 py-1 rounded bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700">
-                             {formatKey(key)}
-                         </span>
+                         key !== 'KnownRisk' && (
+                             <span key={key} className="text-sm px-2.5 py-1 rounded bg-slate-50 dark:bg-slate-800 text-slate-500 border border-slate-100 dark:border-slate-700">
+                                 {formatKey(key)}
+                             </span>
+                         )
                      ))}
                 </div>
             </div>
@@ -253,6 +256,19 @@ const TechDetailPage = () => {
                     Export JSON
                 </button>
             </div>
+
+            {/* Known Risk Section */}
+            {techData.KnownRisk && (
+                <div className="mb-10 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/50 p-6 flex gap-4 shadow-sm animate-fade-in">
+                    <div className="text-red-500 dark:text-red-400 flex-shrink-0 mt-1">
+                        <AlertTriangle size={28} />
+                    </div>
+                    <div>
+                        <h3 className="text-lg font-bold text-red-700 dark:text-red-400 mb-2">Known Risk</h3>
+                        <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed">{techData.KnownRisk}</p>
+                    </div>
+                </div>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 {/* Main Content Area */}

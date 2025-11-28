@@ -4,6 +4,7 @@ import { AppData } from './types';
 export const TECH_STACK_DATA: AppData = {
   "Common Application Stacks": {
     "PHP": {
+      "KnownRisk": "PHP apps often expose sensitive debugging output or rely on user-controlled file paths, increasing risk of file inclusion and insecure handling of uploads.",
       "ConfigFiles": ["php.ini", ".user.ini", "config.php", "wp-config.php", "local-config.php", "configuration.php (Joomla)", "settings.php (Drupal)"],
       "Variables": ["$_SERVER", "$_ENV", "$_GET", "$_POST", "$_COOKIE", "$_FILES", "$GLOBALS"],
       "CommonDirectories": ["includes/", "vendor/", "public/", "uploads/", "admin/", "assets/"],
@@ -17,6 +18,7 @@ export const TECH_STACK_DATA: AppData = {
       "UsefulTools": ["phpggc (Gadget Chains)", "WordPress/Specific CMS Scanners"]
     },
     "Ruby": {
+      "KnownRisk": "Ruby stacks may expose development consoles or trust input in unsafe serialization functions, increasing risk of path or object manipulation.",
       "ConfigFiles": ["config.ru", ".env", "Gemfile"],
       "Variables": ["ENV", "$LOAD_PATH"],
       "CommonDirectories": ["lib/", "bin/", "public/"],
@@ -29,6 +31,7 @@ export const TECH_STACK_DATA: AppData = {
       "UsefulTools": ["rack-mini-profiler"]
     },
     "Node.js": {
+      "KnownRisk": "Node ecosystems depend heavily on third-party packages, increasing exposure to prototype pollution, unsafe command wrappers, or weak JWT settings.",
       "ConfigFiles": ["package.json", "package-lock.json", ".env", "tsconfig.json", "webpack.config.js", "ecosystem.config.js", "config.js", "app.js", "server.js"],
       "CommonDirectories": ["node_modules/", "dist/", "src/", "public/", "views/", "routes/", "config/"],
       "LogFiles": ["npm-debug.log", "yarn-error.log", "pm2.log", "error.log", "app.log", "forever logs"],
@@ -43,6 +46,7 @@ export const TECH_STACK_DATA: AppData = {
 
   "WebServers": {
     "Tomcat": {
+      "KnownRisk": "Default management consoles and weak credentials frequently expose administrative access, and older connector settings may leak internal files.",
       "ConfigFiles": ["server.xml", "web.xml", "context.xml", "tomcat-users.xml", "catalina.policy"],
       "Variables": ["CATALINA_HOME", "JAVA_OPTS", "JRE_HOME"],
       "CommonDirectories": ["webapps/", "conf/", "logs/", "bin/", "work/", "temp/"],
@@ -57,6 +61,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Nginx": {
+      "KnownRisk": "Misconfigured alias or status endpoints can expose internal files or system metadata, enabling information disclosure or unintended access.",
       "ConfigFiles": ["nginx.conf", "sites-enabled/default", "conf.d/*.conf", "mime.types"],
       "Variables": ["$host", "$uri", "$remote_addr", "$request_filename"],
       "CommonDirectories": ["/etc/nginx/", "/var/log/nginx/", "/usr/share/nginx/html/"],
@@ -71,6 +76,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Apache": {
+      "KnownRisk": "Exposed server-info/status pages, permissive .htaccess rules, or outdated CGI components increase risk of information leakage or unintended script execution.",
       "ConfigFiles": ["httpd.conf", "apache2.conf", ".htaccess", "ports.conf", "sites-available/000-default.conf", "httpd-vhosts.conf"],
       "Variables": ["ServerName", "DocumentRoot", "ServerTokens", "ServerSignature"],
       "CommonDirectories": ["/var/www/", "/cgi-bin/", "/htdocs/", "/etc/apache2/"],
@@ -87,6 +93,7 @@ export const TECH_STACK_DATA: AppData = {
 
   "Databases": {
     "MySQL": {
+      "KnownRisk": "Weak or blank root credentials and permissive file-write configurations can allow unauthorized access or unintended file operations.",
       "ConfigFiles": ["my.cnf", "my.ini", "mysql.conf"],
       "Variables": ["version", "datadir", "secure_file_priv"],
       "CommonDirectories": ["/var/lib/mysql/", "/etc/mysql/", "/usr/share/mysql/"],
@@ -101,12 +108,14 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Redis": {
+      "KnownRisk": "Redis frequently runs without authentication and trusts the local network, making exposed instances vulnerable to unauthorized data access or modification.",
       "ConfigFiles": ["redis.conf"],
       "ExposedEndpoints": ["Port 6379"],
       "CommonVulnerabilities": ["Unauthenticated Access (RCE via cron/ssh key)"]
     },
 
     "PostgreSQL": {
+      "KnownRisk": "Misconfigured pg_hba.conf or permissive COPY PROGRAM privileges can enable unintended command execution or unauthorized connections.",
       "ConfigFiles": ["postgresql.conf", "pg_hba.conf", "pg_ident.conf"],
       "Variables": ["current_setting", "version()"],
       "CommonDirectories": ["/var/lib/postgresql/", "/etc/postgresql/", "/usr/share/postgresql/"],
@@ -121,6 +130,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "MongoDB": {
+      "KnownRisk": "Unauthenticated deployments and permissive query operators (e.g., $where) can lead to unauthorized access or unintended code execution.",
       "ConfigFiles": ["mongod.conf", ".mongorc.js"],
       "Variables": ["db.version()", "process.env"],
       "CommonDirectories": ["/var/lib/mongodb/", "/data/db/"],
@@ -137,6 +147,7 @@ export const TECH_STACK_DATA: AppData = {
 
   "Frameworks_CMS": {
     "WordPress": {
+      "KnownRisk": "The large plugin ecosystem introduces frequent vulnerabilities, and exposed XML‑RPC or login endpoints aid enumeration or brute-force attempts.",
       "ConfigFiles": ["wp-config.php", ".htaccess", "wp-content/themes/*/functions.php", "wp-content/plugins/*/*.php"],
       "Variables": ["$wpdb", "DB_NAME", "DB_USER", "DB_PASSWORD", "AUTH_KEY", "NONCE_KEY"],
       "CommonDirectories": ["wp-content/", "wp-admin/", "wp-includes/", "wp-content/uploads/"],
@@ -151,6 +162,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Django": {
+      "KnownRisk": "Running in DEBUG mode or exposing secret keys can reveal sensitive system information and weaken authentication or session integrity.",
       "ConfigFiles": ["settings.py", "wsgi.py"],
       "EnvironmentVariables": ["DJANGO_SETTINGS_MODULE", "SECRET_KEY"],
       "ExposedEndpoints": ["/admin/"],
@@ -158,6 +170,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "SpringBoot": {
+      "KnownRisk": "Unprotected Actuator endpoints and unsafe expression evaluation (SpEL) may expose sensitive configuration or enable unintended actions.",
       "ConfigFiles": ["application.properties", "application.yml", "bootstrap.yml", "logback-spring.xml"],
       "Variables": ["@Value()", "System.getProperty", "#{...}"],
       "CommonDirectories": ["resources/", "static/", "templates/", "META-INF/"],
@@ -170,7 +183,9 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["(Actuator often unauthenticated)"],
       "UsefulTools": ["SpringBootExploit"]
     },
-        "Flask": {
+
+    "Flask": {
+      "KnownRisk": "The Flask debugger and template engine can expose internal system details or evaluate unintended template expressions if misconfigured.",
       "ConfigFiles": ["config.py", ".env", "settings.py"],
       "Variables": ["os.environ", "app.config"],
       "CommonDirectories": ["instance/", "templates/", "static/"],
@@ -186,6 +201,7 @@ export const TECH_STACK_DATA: AppData = {
 
   "AdditionalTechnologies": {
     "Docker": {
+      "KnownRisk": "Exposed Docker sockets or privileged containers can allow full host compromise due to bypassed container isolation.",
       "ConfigFiles": ["Dockerfile", "docker-compose.yml", ".dockerignore", "daemon.json"],
       "CommonDirectories": ["/var/lib/docker/", "/etc/docker/", "~/.docker/"],
       "LogFiles": ["docker logs <container>", "/var/log/docker.log"],
@@ -197,6 +213,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Kubernetes": {
+      "KnownRisk": "Misconfigured RBAC permissions, exposed kubelet endpoints, or privileged pods can provide escalation paths across the cluster.",
       "ConfigFiles": ["~/.kube/config", "/etc/kubernetes/", "/var/run/secrets/kubernetes.io/serviceaccount/"],
       "CommonDirectories": ["~/.kube/", "/etc/kubernetes/"],
       "ExposedEndpoints": ["Kubernetes API (443)", "kubelet (10250)", "etcd (2379)"],
@@ -205,7 +222,9 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Privileged Pods", "Misconfigured RBAC"],
       "UsefulTools": ["kubectl", "kube-hunter"]
     },
-     "Laravel": {
+
+    "Laravel": {
+      "KnownRisk": "Exposed .env files and debug interfaces often reveal application keys, database credentials, and other secrets.",
       "ConfigFiles": ["config/app.php", "config/database.php", ".env", "composer.json"],
       "Variables": ["env()", "config()", "$_ENV"],
       "CommonDirectories": ["app/", "routes/", "storage/", "resources/", "vendor/"],
@@ -219,6 +238,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "FastAPI": {
+      "KnownRisk": "Public Swagger/OpenAPI documentation may reveal authentication flows, parameter structures, and internal routes.",
       "ConfigFiles": ["settings.py", "config.py"],
       "Variables": ["os.environ", "Settings(BaseModel)"],
       "CommonDirectories": ["app/", "logs/", "static/"],
@@ -232,6 +252,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "GoLang": {
+      "KnownRisk": "Go’s pprof/debug endpoints can expose runtime data, and unsafe file operations may lead to unintended directory access.",
       "ConfigFiles": ["config.json", "app.yaml", ".env"],
       "Variables": ["os.Getenv()", "flag variables"],
       "CommonDirectories": ["cmd/", "pkg/", "internal/", "logs/"],
@@ -245,6 +266,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Elasticsearch": {
+      "KnownRisk": "Unauthenticated API endpoints can expose cluster operations and data, and insecure plugin systems may allow unintended behavior.",
       "ConfigFiles": ["elasticsearch.yml", "jvm.options"],
       "Variables": ["cluster.name", "node.name"],
       "CommonDirectories": ["/var/lib/elasticsearch/", "/etc/elasticsearch/"],
@@ -256,7 +278,9 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Unauthenticated API Access", "RCE via Plugins"],
       "UsefulTools": ["ElasticDump"]
     },
-       "AWS": {
+
+    "AWS": {
+      "KnownRisk": "Misconfigured IAM roles, public cloud resources, or leaked credentials can expose accounts to privilege escalation or data access.",
       "ConfigFiles": ["~/.aws/credentials", "~/.aws/config"],
       "Variables": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"],
       "CommonDirectories": ["~/.aws/"],
@@ -269,6 +293,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "Azure": {
+      "KnownRisk": "Broad role assignments or weakness in access control configuration may allow unintended access to Azure resources.",
       "ConfigFiles": ["azureProfile.json", "azureConfig.json"],
       "Variables": ["AZURE_TENANT_ID", "AZURE_CLIENT_ID"],
       "CommonDirectories": ["~/.azure/"],
@@ -282,6 +307,7 @@ export const TECH_STACK_DATA: AppData = {
     },
 
     "GCP": {
+      "KnownRisk": "Overly permissive IAM roles and exposed service account credentials can provide project-wide control to unauthorized actors.",
       "ConfigFiles": ["application_default_credentials.json", "gcloud config"],
       "Variables": ["GOOGLE_APPLICATION_CREDENTIALS"],
       "CommonDirectories": ["~/.config/gcloud/"],
@@ -296,7 +322,8 @@ export const TECH_STACK_DATA: AppData = {
   },
 
   "OtherTechnologies": {
-        "RabbitMQ": {
+    "RabbitMQ": {
+      "KnownRisk": "Exposed management interfaces combined with default credentials can give unauthorized users control over message queues.",
       "ConfigFiles": ["rabbitmq.conf", "advanced.config"],
       "Variables": ["RABBITMQ_NODENAME", "RABBITMQ_CONFIG_FILE"],
       "CommonDirectories": ["/var/lib/rabbitmq/", "/etc/rabbitmq/"],
@@ -308,7 +335,9 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Default Credentials", "Management Interface Exposure"],
       "UsefulTools": ["rabbitmqadmin"]
     },
+
     "Memcached": {
+      "KnownRisk": "Unauthenticated Memcached instances exposed to a network can reveal cached data or allow unintended data manipulation.",
       "ConfigFiles": ["memcached.conf"],
       "Variables": ["-m", "-p", "-u"],
       "CommonDirectories": ["var/run/memcached/"],
@@ -320,7 +349,9 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Unauthorized Access", "Data Dump Exposure"],
       "UsefulTools": ["memcdump", "stats"]
     },
-        "Jenkins": {
+
+    "Jenkins": {
+      "KnownRisk": "Exposed script consoles or CLI endpoints can bypass traditional controls and allow administrative-level operations.",
       "ConfigFiles": ["config.xml", "credentials.xml", "jenkins.yaml"],
       "Variables": ["JENKINS_HOME"],
       "CommonDirectories": ["~/.jenkins/", "plugins/", "jobs/"],
@@ -332,7 +363,9 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Script Console RCE", "Open CLI"],
       "UsefulTools": ["jenkins-cli"]
     },
+
     "Git": {
+      "KnownRisk": "Exposed .git directories can reveal complete source histories, internal credentials, and sensitive configuration files.",
       "CommonDirectories": [".git/", ".git/hooks/", ".git/objects/"],
       "ConfigFiles": [".git/config", ".gitignore"],
       "CommonVulnerabilities": ["Exposed .git directory"]

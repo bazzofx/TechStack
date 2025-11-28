@@ -1,4 +1,5 @@
 export interface TechDetails {
+  KnownRisk?: string;
   ConfigFiles?: string[];
   Variables?: string[];
   CommonDirectories?: string[];
@@ -10,7 +11,7 @@ export interface TechDetails {
   CommonVulnerabilities?: string[];
   DefaultCredentials?: string[];
   UsefulTools?: string[];
-  [key: string]: string[] | undefined; // Fallback for flexibility
+  [key: string]: string | string[] | undefined; // Fallback for flexibility
 }
 
 export interface TechCategory {
