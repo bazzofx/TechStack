@@ -1,8 +1,7 @@
 import { AppData } from './types';
 
-// Based on the user provided JSON structure, expanded for demo purposes
 export const TECH_STACK_DATA: AppData = {
-  "Common Application Stacks": {
+  "1. Common Application Stacks": {
     "PHP": {
       "KnownRisk": "PHP apps often expose sensitive debugging output or rely on user-controlled file paths, increasing risk of file inclusion and insecure handling of uploads.",
       "ConfigFiles": ["php.ini", ".user.ini", "config.php", "wp-config.php", "local-config.php", "configuration.php (Joomla)", "settings.php (Drupal)"],
@@ -41,10 +40,79 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Prototype Pollution", "Command Injection", "SQL/NoSQL Injection", "Path Traversal", "JWT Misconfiguration"],
       "DefaultCredentials": ["(Application Specific)"],
       "UsefulTools": ["retire.js", "npm audit"]
+    },
+    "Python": {
+      "KnownRisk": "Generic Python apps may expose debug consoles or unsafe eval/serialization endpoints.",
+      "ConfigFiles": ["requirements.txt", "Pipfile", ".env"],
+      "Variables": ["os.environ"],
+      "CommonDirectories": ["app/", "src/", "bin/"],
+      "LogFiles": ["app.log"],
+      "BackupFiles": ["*.py.bak"],
+      "ExposedEndpoints": ["/console", "/debug"],
+      "EnvironmentVariables": ["PYTHON_ENV"],
+      "DebugModes": ["FLASK_ENV=development", "DEBUG=True"],
+      "CommonVulnerabilities": ["RCE via eval", "Deserialization"],
+      "DefaultCredentials": ["(Application Specific)"],
+      "UsefulTools": ["pyrasite", "bandit"]
+    },
+    "Java": {
+      "KnownRisk": "Java apps may expose JSPs, outdated libraries, or unsafe deserialization endpoints.",
+      "ConfigFiles": ["web.xml", "pom.xml", "application.properties"],
+      "Variables": ["System.getProperty()"],
+      "CommonDirectories": ["WEB-INF/", "src/", "lib/"],
+      "LogFiles": ["catalina.out", "application.log"],
+      "BackupFiles": ["*.war.bak"],
+      "ExposedEndpoints": ["/admin/", "/test/"],
+      "EnvironmentVariables": ["JAVA_HOME"],
+      "DebugModes": ["-Xdebug", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"],
+      "CommonVulnerabilities": ["Deserialization", "Path Traversal"],
+      "DefaultCredentials": ["admin:admin"],
+      "UsefulTools": ["ysoserial", "Burp Suite"]
+    },
+    "ASP.NET": {
+      "KnownRisk": "Misconfigured web.config or default authentication can expose sensitive data and admin endpoints.",
+      "ConfigFiles": ["web.config", ".env"],
+      "Variables": ["AppSettings"],
+      "CommonDirectories": ["bin/", "wwwroot/", "App_Data/"],
+      "LogFiles": ["iis.log", "eventviewer.log"],
+      "BackupFiles": ["web.config.bak"],
+      "ExposedEndpoints": ["/admin/", "/_vti_bin/"],
+      "EnvironmentVariables": ["ASPNETCORE_ENVIRONMENT"],
+      "DebugModes": ["Development=True"],
+      "CommonVulnerabilities": ["RCE via ViewState", "Authentication Bypass"],
+      "DefaultCredentials": ["(Application Specific)"],
+      "UsefulTools": ["dotnet-projects", "Burp Suite"]
+    },
+    "Perl": {
+      "KnownRisk": "Legacy CGI scripts may expose sensitive parameters or allow command injection.",
+      "ConfigFiles": ["cgi-bin/*.pl", ".env"],
+      "Variables": ["%ENV"],
+      "CommonDirectories": ["cgi-bin/", "lib/", "bin/"],
+      "LogFiles": ["cgi.log", "error.log"],
+      "BackupFiles": ["*.pl.bak"],
+      "ExposedEndpoints": ["/cgi-bin/test.pl"],
+      "EnvironmentVariables": ["PERL5LIB"],
+      "DebugModes": ["-d"],
+      "CommonVulnerabilities": ["Command Injection", "Information Disclosure"],
+      "DefaultCredentials": ["(Application Specific)"],
+      "UsefulTools": ["Perl::Critic"]
+    },
+    "GoLang": {
+      "KnownRisk": "Go’s pprof/debug endpoints can expose runtime data, and unsafe file operations may lead to unintended directory access.",
+      "ConfigFiles": ["config.json", "app.yaml", ".env"],
+      "Variables": ["os.Getenv()", "flag variables"],
+      "CommonDirectories": ["cmd/", "pkg/", "internal/", "logs/"],
+      "LogFiles": ["app.log"],
+      "BackupFiles": ["*.go.bak"],
+      "ExposedEndpoints": ["/debug/pprof/", "/metrics"],
+      "EnvironmentVariables": ["GO_ENV", "DATABASE_URL"],
+      "DebugModes": ["GODEBUG=*"],
+      "CommonVulnerabilities": ["Directory Traversal", "Race Conditions"],
+      "UsefulTools": ["pprof", "go vet"]
     }
   },
 
-  "WebServers": {
+  "2. Web Servers / Reverse Proxies": {
     "Tomcat": {
       "KnownRisk": "Default management consoles and weak credentials frequently expose administrative access, and older connector settings may leak internal files.",
       "ConfigFiles": ["server.xml", "web.xml", "context.xml", "tomcat-users.xml", "catalina.policy"],
@@ -59,7 +127,6 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["tomcat:tomcat", "admin:admin", "role1:role1", "both:tomcat", "(Check tomcat-users.xml for plaintext credentials)"],
       "UsefulTools": ["Metasploit (tomcat_mgr_deploy)", "Ghostcat Scanner"]
     },
-
     "Nginx": {
       "KnownRisk": "Misconfigured alias or status endpoints can expose internal files or system metadata, enabling information disclosure or unintended access.",
       "ConfigFiles": ["nginx.conf", "sites-enabled/default", "conf.d/*.conf", "mime.types"],
@@ -74,7 +141,6 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["(None)"],
       "UsefulTools": ["Nmap NSE http-nginx-version"]
     },
-
     "Apache": {
       "KnownRisk": "Exposed server-info/status pages, permissive .htaccess rules, or outdated CGI components increase risk of information leakage or unintended script execution.",
       "ConfigFiles": ["httpd.conf", "apache2.conf", ".htaccess", "ports.conf", "sites-available/000-default.conf", "httpd-vhosts.conf"],
@@ -88,10 +154,80 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": [".htaccess Misconfiguration", "Shellshock (CVE-2014-6271)", "Log Poisoning", "HTTP Verb Tampering"],
       "DefaultCredentials": ["(None)"],
       "UsefulTools": ["gobuster", "dirb"]
+    },
+    "Lighttpd": {
+      "KnownRisk": "Misconfigured lighttpd servers can expose internal files or debug information.",
+      "ConfigFiles": ["lighttpd.conf"],
+      "Variables": ["server.document-root"],
+      "CommonDirectories": ["/var/www/", "/etc/lighttpd/"],
+      "LogFiles": ["/var/log/lighttpd/error.log"],
+      "BackupFiles": ["lighttpd.conf.bak"],
+      "ExposedEndpoints": ["/status"],
+      "EnvironmentVariables": ["LIGHTTPD_VERSION"],
+      "DebugModes": ["debug.log"],
+      "CommonVulnerabilities": ["Information Disclosure"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["Nmap NSE", "dirb"]
+    },
+    "Caddy": {
+      "KnownRisk": "Default admin endpoints may be exposed, revealing configuration or TLS info.",
+      "ConfigFiles": ["Caddyfile"],
+      "Variables": ["CADDY_ENV"],
+      "CommonDirectories": ["/etc/caddy/", "/var/www/html/"],
+      "LogFiles": ["/var/log/caddy/access.log", "/var/log/caddy/error.log"],
+      "BackupFiles": ["Caddyfile.bak"],
+      "ExposedEndpoints": ["/admin/"],
+      "EnvironmentVariables": ["CADDY_VERSION"],
+      "DebugModes": ["--log=debug"],
+      "CommonVulnerabilities": ["Information Disclosure"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["caddy list-modules"]
+    },
+    "HAProxy": {
+      "KnownRisk": "Exposed stats endpoint or misconfigured ACLs may reveal backend structure.",
+      "ConfigFiles": ["haproxy.cfg"],
+      "Variables": ["global", "defaults"],
+      "CommonDirectories": ["/etc/haproxy/"],
+      "LogFiles": ["/var/log/haproxy.log"],
+      "BackupFiles": ["haproxy.cfg.bak"],
+      "ExposedEndpoints": ["/stats"],
+      "EnvironmentVariables": ["HAPROXY_VERSION"],
+      "DebugModes": ["debug"],
+      "CommonVulnerabilities": ["Information Disclosure"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["haproxyctl"]
+    },
+    "Varnish": {
+      "KnownRisk": "Debug or management endpoints may allow cache poisoning or internal info leakage.",
+      "ConfigFiles": ["default.vcl"],
+      "Variables": ["backend", "vcl_recv"],
+      "CommonDirectories": ["/etc/varnish/"],
+      "LogFiles": ["/var/log/varnish/varnish.log"],
+      "BackupFiles": ["default.vcl.bak"],
+      "ExposedEndpoints": ["/varnish-status"],
+      "EnvironmentVariables": ["VARNISH_VERSION"],
+      "DebugModes": ["-d"],
+      "CommonVulnerabilities": ["Cache Poisoning", "Information Disclosure"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["varnishlog", "varnishstat"]
+    },
+    "OpenResty": {
+      "KnownRisk": "Exposed Lua scripts may allow server-side execution or info disclosure.",
+      "ConfigFiles": ["nginx.conf", "lua/*.lua"],
+      "Variables": ["ngx.var"],
+      "CommonDirectories": ["/usr/local/openresty/nginx/", "/etc/openresty/"],
+      "LogFiles": ["/var/log/openresty/access.log"],
+      "BackupFiles": ["nginx.conf.bak"],
+      "ExposedEndpoints": ["/lua_status"],
+      "EnvironmentVariables": ["OPENRESTY_VERSION"],
+      "DebugModes": ["--debug"],
+      "CommonVulnerabilities": ["RCE via Lua scripts"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["openresty-debug"]
     }
   },
 
-  "Databases": {
+  "3. Databases / Data Stores": {
     "MySQL": {
       "KnownRisk": "Weak or blank root credentials and permissive file-write configurations can allow unauthorized access or unintended file operations.",
       "ConfigFiles": ["my.cnf", "my.ini", "mysql.conf"],
@@ -106,14 +242,12 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["root:(blank)", "root:root", "admin:admin"],
       "UsefulTools": ["sqlmap", "mysql client", "Metasploit"]
     },
-
     "Redis": {
       "KnownRisk": "Redis frequently runs without authentication and trusts the local network, making exposed instances vulnerable to unauthorized data access or modification.",
       "ConfigFiles": ["redis.conf"],
       "ExposedEndpoints": ["Port 6379"],
       "CommonVulnerabilities": ["Unauthenticated Access (RCE via cron/ssh key)"]
     },
-
     "PostgreSQL": {
       "KnownRisk": "Misconfigured pg_hba.conf or permissive COPY PROGRAM privileges can enable unintended command execution or unauthorized connections.",
       "ConfigFiles": ["postgresql.conf", "pg_hba.conf", "pg_ident.conf"],
@@ -128,7 +262,6 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["postgres:postgres"],
       "UsefulTools": ["psql", "Metasploit"]
     },
-
     "MongoDB": {
       "KnownRisk": "Unauthenticated deployments and permissive query operators (e.g., $where) can lead to unauthorized access or unintended code execution.",
       "ConfigFiles": ["mongod.conf", ".mongorc.js"],
@@ -142,10 +275,79 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["No Auth", "NoSQL Injection", "JS Injection ($where)", "Privilege Escalation"],
       "DefaultCredentials": ["admin:admin"],
       "UsefulTools": ["mongo client", "NoSQLMap"]
+    },
+    "Oracle": {
+      "KnownRisk": "Misconfigured listener or default credentials can expose database and allow code execution.",
+      "ConfigFiles": ["tnsnames.ora", "listener.ora"],
+      "Variables": ["ORACLE_HOME"],
+      "CommonDirectories": ["/u01/app/oracle/", "/etc/oracle/"],
+      "LogFiles": ["listener.log", "alert.log"],
+      "BackupFiles": ["*.ora.bak"],
+      "ExposedEndpoints": ["Port 1521"],
+      "EnvironmentVariables": ["ORACLE_SID", "ORACLE_PWD"],
+      "DebugModes": ["TRACE_LEVEL_CLIENT=16"],
+      "CommonVulnerabilities": ["Default Credentials", "SQL Injection"],
+      "DefaultCredentials": ["system:oracle"],
+      "UsefulTools": ["sqlplus", "oracle-exploit-scripts"]
+    },
+    "SQLServer": {
+      "KnownRisk": "Weak SA passwords or misconfigured endpoints expose administrative access.",
+      "ConfigFiles": ["sqlserver.conf"],
+      "Variables": ["MSSQL_SA_PASSWORD"],
+      "CommonDirectories": ["C:/Program Files/Microsoft SQL Server/"],
+      "LogFiles": ["errorlog", "sqlagent.log"],
+      "BackupFiles": ["*.bak"],
+      "ExposedEndpoints": ["Port 1433"],
+      "EnvironmentVariables": ["MSSQL_INSTANCE"],
+      "DebugModes": ["-d"],
+      "CommonVulnerabilities": ["Default Credentials", "SQL Injection"],
+      "DefaultCredentials": ["sa:password"],
+      "UsefulTools": ["sqlcmd", "mssql-cli"]
+    },
+    "Cassandra": {
+      "KnownRisk": "Open clusters may expose all data without authentication.",
+      "ConfigFiles": ["cassandra.yaml"],
+      "Variables": ["cluster_name", "authenticator"],
+      "CommonDirectories": ["/var/lib/cassandra/"],
+      "LogFiles": ["system.log"],
+      "BackupFiles": ["*.bak"],
+      "ExposedEndpoints": ["Port 9042"],
+      "EnvironmentVariables": ["CASSANDRA_HOME"],
+      "DebugModes": ["DEBUG=true"],
+      "CommonVulnerabilities": ["No Auth", "Data Leakage"],
+      "DefaultCredentials": ["cassandra:cassandra"],
+      "UsefulTools": ["cqlsh"]
+    },
+    "CouchDB": {
+      "KnownRisk": "Open CouchDB exposes all databases and may allow command execution via design documents.",
+      "ConfigFiles": ["local.ini", "default.ini"],
+      "Variables": ["couchdb.user", "couchdb.password"],
+      "CommonDirectories": ["/var/lib/couchdb/", "/etc/couchdb/"],
+      "LogFiles": ["couchdb.log"],
+      "BackupFiles": ["*.bak"],
+      "ExposedEndpoints": ["/_all_dbs"],
+      "EnvironmentVariables": ["COUCHDB_USER", "COUCHDB_PASSWORD"],
+      "DebugModes": ["log.level=debug"],
+      "CommonVulnerabilities": ["No Auth", "Design Doc Injection"],
+      "DefaultCredentials": ["admin:admin"],
+      "UsefulTools": ["couchdb-cli"]
+    },
+    "Memcached": {
+      "KnownRisk": "Unauthenticated Memcached instances exposed to a network can reveal cached data or allow unintended data manipulation.",
+      "ConfigFiles": ["memcached.conf"],
+      "Variables": ["-m", "-p", "-u"],
+      "CommonDirectories": ["var/run/memcached/"],
+      "LogFiles": ["memcached.log"],
+      "BackupFiles": ["memcached.conf.bak"],
+      "ExposedEndpoints": ["Port 11211"],
+      "EnvironmentVariables": ["MEMCACHED_MEMORY", "MEMCACHED_PORT"],
+      "DebugModes": ["-vv"],
+      "CommonVulnerabilities": ["Unauthorized Access", "Data Dump Exposure"],
+      "UsefulTools": ["memcdump", "stats"]
     }
   },
 
-  "Frameworks_CMS": {
+  "4. Frameworks / CMS": {
     "WordPress": {
       "KnownRisk": "The large plugin ecosystem introduces frequent vulnerabilities, and exposed XML‑RPC or login endpoints aid enumeration or brute-force attempts.",
       "ConfigFiles": ["wp-config.php", ".htaccess", "wp-content/themes/*/functions.php", "wp-content/plugins/*/*.php"],
@@ -160,7 +362,6 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["admin:admin", "admin:password"],
       "UsefulTools": ["WPScan"]
     },
-
     "Django": {
       "KnownRisk": "Running in DEBUG mode or exposing secret keys can reveal sensitive system information and weaken authentication or session integrity.",
       "ConfigFiles": ["settings.py", "wsgi.py"],
@@ -168,7 +369,6 @@ export const TECH_STACK_DATA: AppData = {
       "ExposedEndpoints": ["/admin/"],
       "DebugModes": ["DEBUG = True"]
     },
-
     "SpringBoot": {
       "KnownRisk": "Unprotected Actuator endpoints and unsafe expression evaluation (SpEL) may expose sensitive configuration or enable unintended actions.",
       "ConfigFiles": ["application.properties", "application.yml", "bootstrap.yml", "logback-spring.xml"],
@@ -183,7 +383,6 @@ export const TECH_STACK_DATA: AppData = {
       "DefaultCredentials": ["(Actuator often unauthenticated)"],
       "UsefulTools": ["SpringBootExploit"]
     },
-
     "Flask": {
       "KnownRisk": "The Flask debugger and template engine can expose internal system details or evaluate unintended template expressions if misconfigured.",
       "ConfigFiles": ["config.py", ".env", "settings.py"],
@@ -196,33 +395,147 @@ export const TECH_STACK_DATA: AppData = {
       "DebugModes": ["FLASK_ENV=development"],
       "CommonVulnerabilities": ["Debug Console RCE", "Server-Side Template Injection"],
       "UsefulTools": ["Flask-DebugToolbar"]
-    }
-  },
-
-  "AdditionalTechnologies": {
-    "Docker": {
-      "KnownRisk": "Exposed Docker sockets or privileged containers can allow full host compromise due to bypassed container isolation.",
-      "ConfigFiles": ["Dockerfile", "docker-compose.yml", ".dockerignore", "daemon.json"],
-      "CommonDirectories": ["/var/lib/docker/", "/etc/docker/", "~/.docker/"],
-      "LogFiles": ["docker logs <container>", "/var/log/docker.log"],
-      "ExposedEndpoints": ["Docker API (2375/2376)", "/var/run/docker.sock"],
-      "EnvironmentVariables": ["DOCKER_HOST", "DOCKER_TLS_VERIFY"],
-      "DebugModes": ["--debug", "\"debug\": true in daemon.json"],
-      "CommonVulnerabilities": ["Privileged Container Escape", "Docker Socket Exposure"],
-      "UsefulTools": ["dive", "trivy", "grype"]
     },
-
-    "Kubernetes": {
-      "KnownRisk": "Misconfigured RBAC permissions, exposed kubelet endpoints, or privileged pods can provide escalation paths across the cluster.",
-      "ConfigFiles": ["~/.kube/config", "/etc/kubernetes/", "/var/run/secrets/kubernetes.io/serviceaccount/"],
-      "CommonDirectories": ["~/.kube/", "/etc/kubernetes/"],
-      "ExposedEndpoints": ["Kubernetes API (443)", "kubelet (10250)", "etcd (2379)"],
-      "EnvironmentVariables": ["KUBERNETES_PORT", "POD_NAME", "POD_NAMESPACE"],
-      "DebugModes": ["--v=4", "audit logging"],
-      "CommonVulnerabilities": ["Privileged Pods", "Misconfigured RBAC"],
-      "UsefulTools": ["kubectl", "kube-hunter"]
+    "Magento": {
+      "KnownRisk": "Magento often exposes admin panels, outdated modules, and sensitive API endpoints. Frequently targeted for RCE and credit-card skimming.",
+      "ConfigFiles": ["env.php", "config.php", "local.xml"],
+      "Variables": ["$_SERVER", "$_ENV", "$_GET", "$_POST"],
+      "CommonDirectories": ["app/", "vendor/", "pub/media/", "var/log/", "admin/"],
+      "LogFiles": ["system.log", "exception.log"],
+      "BackupFiles": ["*.php.bak", "*.old", "*.xml.bak"],
+      "ExposedEndpoints": ["/admin/", "/downloader/", "/pub/errors/"],
+      "EnvironmentVariables": ["MAGE_MODE", "DATABASE_URL"],
+      "DebugModes": ["MAGE_MODE=developer"],
+      "CommonVulnerabilities": ["RCE via Magento SOAP/REST", "SQL Injection", "Admin Panel Bruteforce"],
+      "DefaultCredentials": ["admin:admin (common in dev environments)"],
+      "UsefulTools": ["Magento Scanner", "MageReport"]
     },
-
+    "Joomla": {
+      "KnownRisk": "Extension-based vulnerabilities and outdated plugins frequently lead to RCE or admin takeover.",
+      "ConfigFiles": ["configuration.php"],
+      "Variables": ["$_JCONFIG"],
+      "CommonDirectories": ["administrator/", "plugins/", "modules/", "templates/"],
+      "LogFiles": ["error.php"],
+      "BackupFiles": ["configuration.php.bak"],
+      "ExposedEndpoints": ["/administrator/"],
+      "EnvironmentVariables": ["JOOMLA_ENV"],
+      "DebugModes": ["Debug System = On"],
+      "CommonVulnerabilities": ["SQL Injection", "LFI", "Authentication Bypass"],
+      "DefaultCredentials": ["admin:admin"],
+      "UsefulTools": ["JoomScan"]
+    },
+    "Drupal": {
+      "KnownRisk": "Drupalgeddon-like vulnerabilities allowed mass RCE. Exposed endpoints often reveal sensitive configuration.",
+      "ConfigFiles": ["settings.php", "services.yml"],
+      "Variables": ["$config", "$settings"],
+      "CommonDirectories": ["core/", "modules/", "sites/default/"],
+      "LogFiles": ["watchdog.log"],
+      "BackupFiles": ["settings.php.bak"],
+      "ExposedEndpoints": ["/user/login", "/core/install.php"],
+      "EnvironmentVariables": ["DRUPAL_ENV"],
+      "DebugModes": ["Twig Debug Mode"],
+      "CommonVulnerabilities": ["RCE", "SQL Injection"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Droopescan"]
+    },
+    "Ruby on Rails": {
+      "KnownRisk": "Rails apps often expose /rails/info routes or deserialization endpoints vulnerable to object injection.",
+      "ConfigFiles": ["secrets.yml", "database.yml", "environment.rb"],
+      "Variables": ["Rails.env", "ENV"],
+      "CommonDirectories": ["app/", "config/", "log/", "public/"],
+      "LogFiles": ["production.log", "development.log"],
+      "BackupFiles": ["*.rb.bak"],
+      "ExposedEndpoints": ["/rails/info", "/console"],
+      "EnvironmentVariables": ["RAILS_ENV", "SECRET_KEY_BASE"],
+      "DebugModes": ["Rails Development Mode"],
+      "CommonVulnerabilities": ["Mass Assignment", "Deserialization", "Path Traversal"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Rails console enumeration scripts"]
+    },
+    "Express.js": {
+      "KnownRisk": "Developers often expose debug routes or rely on vulnerable middleware. Prototype pollution is common.",
+      "ConfigFiles": ["package.json", ".env"],
+      "Variables": ["process.env", "req", "res"],
+      "CommonDirectories": ["routes/", "middleware/", "public/", "config/"],
+      "LogFiles": ["app.log"],
+      "BackupFiles": ["*.js.bak"],
+      "ExposedEndpoints": ["/debug", "/api/", "/health"],
+      "EnvironmentVariables": ["NODE_ENV", "PORT"],
+      "DebugModes": ["NODE_ENV=development"],
+      "CommonVulnerabilities": ["Prototype Pollution", "NoSQL Injection"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Express Audit Tools"]
+    },
+    "Vue.js": {
+      "KnownRisk": "Source maps frequently leak internal code, API keys, and environment variables.",
+      "ConfigFiles": ["vue.config.js", ".env"],
+      "Variables": ["process.env"],
+      "CommonDirectories": ["src/", "public/", "dist/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/app.js.map", "/main.js.map"],
+      "EnvironmentVariables": ["VUE_APP_*"],
+      "DebugModes": ["Vue Devtools"],
+      "CommonVulnerabilities": ["Source Map Leakage", "Sensitive Info Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Vue.js Source Map Extractors"]
+    },
+    "React": {
+      "KnownRisk": "Source maps and .env files leaked in front-end bundles may expose API keys.",
+      "ConfigFiles": ["package.json", ".env"],
+      "Variables": ["process.env"],
+      "CommonDirectories": ["src/", "build/", "public/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/static/js/*.map"],
+      "EnvironmentVariables": ["REACT_APP_*"],
+      "DebugModes": ["React Developer Tools"],
+      "CommonVulnerabilities": ["Sensitive Info Exposure", "API Key Leakage"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Source Map Decoders"]
+    },
+    "Angular": {
+      "KnownRisk": "Exposed API routes found in `environment.ts` often reveal backend URLs.",
+      "ConfigFiles": ["angular.json", "environment.ts"],
+      "Variables": [],
+      "CommonDirectories": ["src/", "environments/", "dist/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/main.js.map"],
+      "EnvironmentVariables": ["NG_APP_*"],
+      "DebugModes": ["Angular Dev Mode"],
+      "CommonVulnerabilities": ["Sensitive Info Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Angular Inspector"]
+    },
+    "Symfony": {
+      "KnownRisk": "Exposed debug toolbar leaks configuration, credentials, and service information.",
+      "ConfigFiles": ["services.yaml", "parameters.yaml", ".env"],
+      "Variables": ["$_SERVER", "$_ENV"],
+      "CommonDirectories": ["src/", "var/", "vendor/"],
+      "LogFiles": ["dev.log", "prod.log"],
+      "BackupFiles": ["*.php.bak"],
+      "ExposedEndpoints": ["/_profiler", "/_wdt"],
+      "EnvironmentVariables": ["APP_ENV"],
+      "DebugModes": ["APP_ENV=dev"],
+      "CommonVulnerabilities": ["Serialization Attacks", "Sensitive Info Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Symfony Profiler Extractor"]
+    },
+    "CakePHP": {
+      "KnownRisk": "DebugKit and improperly configured bake-generated routes expose sensitive info.",
+      "ConfigFiles": ["app.php", "app_local.php"],
+      "Variables": ["$_SERVER"],
+      "CommonDirectories": ["src/", "templates/", "logs/"],
+      "LogFiles": ["error.log", "debug.log"],
+      "BackupFiles": ["*.php.bak"],
+      "ExposedEndpoints": ["/debug-kit/"],
+      "EnvironmentVariables": ["APP_ENV"],
+      "DebugModes": ["'debug' => true"],
+      "CommonVulnerabilities": ["LFI", "Debug Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["CakePHP DebugKit Parser"]
+    },
     "Laravel": {
       "KnownRisk": "Exposed .env files and debug interfaces often reveal application keys, database credentials, and other secrets.",
       "ConfigFiles": ["config/app.php", "config/database.php", ".env", "composer.json"],
@@ -236,7 +549,6 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Debug Mode Exposure", "Mass Assignment", "Insecure .env Access"],
       "UsefulTools": ["Laravel Telescope", "Laravel Debugbar"]
     },
-
     "FastAPI": {
       "KnownRisk": "Public Swagger/OpenAPI documentation may reveal authentication flows, parameter structures, and internal routes.",
       "ConfigFiles": ["settings.py", "config.py"],
@@ -250,35 +562,44 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["OpenAPI Exposure", "Auth Misconfiguration"],
       "UsefulTools": ["uvicorn --debug"]
     },
+    "Elixir / Phoenix (Ecto)": {
+      "KnownRisk": "Misconfigured endpoints may expose database and authentication info.",
+      "ConfigFiles": ["config/config.exs", "config/dev.exs"],
+      "Variables": ["System.get_env()"],
+      "CommonDirectories": ["lib/", "priv/", "config/"],
+      "LogFiles": ["phoenix.log"],
+      "BackupFiles": ["*.exs.bak"],
+      "ExposedEndpoints": ["/api/", "/debug/"],
+      "EnvironmentVariables": ["MIX_ENV"],
+      "DebugModes": ["--debug"],
+      "CommonVulnerabilities": ["SQL Injection", "Auth Misconfiguration"],
+      "DefaultCredentials": ["(None)"],
+      "UsefulTools": ["mix phx.server"]
+    }
+  },
 
-    "GoLang": {
-      "KnownRisk": "Go’s pprof/debug endpoints can expose runtime data, and unsafe file operations may lead to unintended directory access.",
-      "ConfigFiles": ["config.json", "app.yaml", ".env"],
-      "Variables": ["os.Getenv()", "flag variables"],
-      "CommonDirectories": ["cmd/", "pkg/", "internal/", "logs/"],
-      "LogFiles": ["app.log"],
-      "BackupFiles": ["*.go.bak"],
-      "ExposedEndpoints": ["/debug/pprof/", "/metrics"],
-      "EnvironmentVariables": ["GO_ENV", "DATABASE_URL"],
-      "DebugModes": ["GODEBUG=*"],
-      "CommonVulnerabilities": ["Directory Traversal", "Race Conditions"],
-      "UsefulTools": ["pprof", "go vet"]
+  "5. Container / Orchestration / Cloud / DevOps": {
+    "Docker": {
+      "KnownRisk": "Exposed Docker sockets or privileged containers can allow full host compromise due to bypassed container isolation.",
+      "ConfigFiles": ["Dockerfile", "docker-compose.yml", ".dockerignore", "daemon.json"],
+      "CommonDirectories": ["/var/lib/docker/", "/etc/docker/", "~/.docker/"],
+      "LogFiles": ["docker logs <container>", "/var/log/docker.log"],
+      "ExposedEndpoints": ["Docker API (2375/2376)", "/var/run/docker.sock"],
+      "EnvironmentVariables": ["DOCKER_HOST", "DOCKER_TLS_VERIFY"],
+      "DebugModes": ["--debug", "\"debug\": true in daemon.json"],
+      "CommonVulnerabilities": ["Privileged Container Escape", "Docker Socket Exposure"],
+      "UsefulTools": ["dive", "trivy", "grype"]
     },
-
-    "Elasticsearch": {
-      "KnownRisk": "Unauthenticated API endpoints can expose cluster operations and data, and insecure plugin systems may allow unintended behavior.",
-      "ConfigFiles": ["elasticsearch.yml", "jvm.options"],
-      "Variables": ["cluster.name", "node.name"],
-      "CommonDirectories": ["/var/lib/elasticsearch/", "/etc/elasticsearch/"],
-      "LogFiles": ["elasticsearch.log"],
-      "BackupFiles": ["*.json.bak"],
-      "ExposedEndpoints": ["/_cat", "/_search", "/_cluster"],
-      "EnvironmentVariables": ["ES_JAVA_OPTS"],
-      "DebugModes": ["logger.level=debug"],
-      "CommonVulnerabilities": ["Unauthenticated API Access", "RCE via Plugins"],
-      "UsefulTools": ["ElasticDump"]
+    "Kubernetes": {
+      "KnownRisk": "Misconfigured RBAC permissions, exposed kubelet endpoints, or privileged pods can provide escalation paths across the cluster.",
+      "ConfigFiles": ["~/.kube/config", "/etc/kubernetes/", "/var/run/secrets/kubernetes.io/serviceaccount/"],
+      "CommonDirectories": ["~/.kube/", "/etc/kubernetes/"],
+      "ExposedEndpoints": ["Kubernetes API (443)", "kubelet (10250)", "etcd (2379)"],
+      "EnvironmentVariables": ["KUBERNETES_PORT", "POD_NAME", "POD_NAMESPACE"],
+      "DebugModes": ["--v=4", "audit logging"],
+      "CommonVulnerabilities": ["Privileged Pods", "Misconfigured RBAC"],
+      "UsefulTools": ["kubectl", "kube-hunter"]
     },
-
     "AWS": {
       "KnownRisk": "Misconfigured IAM roles, public cloud resources, or leaked credentials can expose accounts to privilege escalation or data access.",
       "ConfigFiles": ["~/.aws/credentials", "~/.aws/config"],
@@ -291,7 +612,6 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["IAM Privilege Escalation", "Public S3 Buckets"],
       "UsefulTools": ["awscli", "Pacu", "CloudMapper"]
     },
-
     "Azure": {
       "KnownRisk": "Broad role assignments or weakness in access control configuration may allow unintended access to Azure resources.",
       "ConfigFiles": ["azureProfile.json", "azureConfig.json"],
@@ -305,7 +625,6 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Role Assignment Misconfigurations"],
       "UsefulTools": ["Azure CLI", "Az PowerShell"]
     },
-
     "GCP": {
       "KnownRisk": "Overly permissive IAM roles and exposed service account credentials can provide project-wide control to unauthorized actors.",
       "ConfigFiles": ["application_default_credentials.json", "gcloud config"],
@@ -318,10 +637,178 @@ export const TECH_STACK_DATA: AppData = {
       "DebugModes": ["gcloud --verbosity debug"],
       "CommonVulnerabilities": ["Overly permissive IAM roles"],
       "UsefulTools": ["gcloud", "gsutil"]
+    },
+    "Terraform": {
+      "KnownRisk": "Terraform state files contain plaintext secrets and infrastructure credentials.",
+      "ConfigFiles": ["*.tf", "terraform.tfvars"],
+      "Variables": [],
+      "CommonDirectories": [".terraform/", "modules/"],
+      "LogFiles": [],
+      "BackupFiles": ["terraform.tfstate.backup"],
+      "ExposedEndpoints": [],
+      "EnvironmentVariables": ["TF_VAR_*"],
+      "DebugModes": ["TF_LOG=DEBUG"],
+      "CommonVulnerabilities": ["Secrets Exposure", "State File Theft"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["tfsec"]
+    },
+    "Ansible": {
+      "KnownRisk": "Inventory files may expose plaintext SSH keys, vault passwords, and environment secrets.",
+      "ConfigFiles": ["ansible.cfg", "hosts.ini", "group_vars/*.yml"],
+      "Variables": [],
+      "CommonDirectories": ["playbooks/", "roles/"],
+      "LogFiles": ["ansible.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": [],
+      "EnvironmentVariables": ["ANSIBLE_VAULT_PASSWORD_FILE"],
+      "DebugModes": ["-vvv"],
+      "CommonVulnerabilities": ["Vault Key Disclosure", "SSH Key Leakage"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["ansible-vault brute scripts"]
+    },
+    "Podman": {
+      "KnownRisk": "Containers may run rootless but misconfigured socket or API can expose container control.",
+      "ConfigFiles": ["containers.conf", "storage.conf"],
+      "Variables": ["PODMAN_USERNS"],
+      "CommonDirectories": ["~/.config/containers/", "/etc/containers/"],
+      "LogFiles": ["podman.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["Podman API Socket"],
+      "EnvironmentVariables": ["PODMAN_VARLIB"],
+      "DebugModes": ["podman --log-level=debug"],
+      "CommonVulnerabilities": ["Privilege Escalation", "Container Breakout"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Podman Remote Client"]
+    },
+    "OpenShift": {
+      "KnownRisk": "Misconfigured routes and exposed dashboards can reveal internal cluster structure.",
+      "ConfigFiles": ["master-config.yaml", "node-config.yaml"],
+      "Variables": [],
+      "CommonDirectories": ["/etc/origin/"],
+      "LogFiles": ["openshift.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/console", "/apis"],
+      "EnvironmentVariables": ["OPENSHIFT_ENV"],
+      "DebugModes": ["oc --loglevel=10"],
+      "CommonVulnerabilities": ["Token Leakage", "API Exposure"],
+      "DefaultCredentials": ["developer:developer (local clusters)"],
+      "UsefulTools": ["oc CLI", "kube-hunter"]
+    },
+    "Consul": {
+      "KnownRisk": "Exposed Consul APIs allow service modification, key/value access, or remote command execution via task scheduling.",
+      "ConfigFiles": ["consul.hcl"],
+      "Variables": [],
+      "CommonDirectories": ["/etc/consul/", "/var/lib/consul/"],
+      "LogFiles": ["consul.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/v1/agent", "/v1/kv"],
+      "EnvironmentVariables": ["CONSUL_HTTP_TOKEN"],
+      "DebugModes": ["consul --log-level debug"],
+      "CommonVulnerabilities": ["KV Data Exposure", "API Misuse"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["consul CLI"]
+    },
+    "Etcd": {
+      "KnownRisk": "Exposed etcd clusters allow attackers to dump all Kubernetes secrets.",
+      "ConfigFiles": ["etcd.conf"],
+      "Variables": [],
+      "CommonDirectories": ["/var/lib/etcd/"],
+      "LogFiles": ["etcd.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["Port 2379"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["--debug"],
+      "CommonVulnerabilities": ["Secret Dumping", "Cluster Takeover"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["etcdctl"]
+    },
+     "DigitalOcean": {
+      "KnownRisk": "API tokens often leaked in Git repositories or CI logs, enabling full account takeover.",
+      "ConfigFiles": ["doctl/config.yaml"],
+      "Variables": [],
+      "CommonDirectories": ["~/.config/doctl/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/v2/"],
+      "EnvironmentVariables": ["DIGITALOCEAN_ACCESS_TOKEN"],
+      "DebugModes": ["doctl --verbose"],
+      "CommonVulnerabilities": ["API Token Leakage", "Metadata Service Abuse"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["doctl"]
+    },
+    "Linode": {
+      "KnownRisk": "API tokens grant full access to hosted instances and DNS.",
+      "ConfigFiles": ["linode-cli"],
+      "Variables": [],
+      "CommonDirectories": ["~/.config/linode/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/v4/"],
+      "EnvironmentVariables": ["LINODE_CLI_TOKEN"],
+      "DebugModes": ["linode-cli --debug"],
+      "CommonVulnerabilities": ["Token Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["linode-cli"]
+    },
+    "Vultr": {
+      "KnownRisk": "Leaked API keys allow creation of new instances and exfiltration of snapshots.",
+      "ConfigFiles": ["vultr-cli.json"],
+      "Variables": [],
+      "CommonDirectories": ["~/.vultr/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/v2/"],
+      "EnvironmentVariables": ["VULTR_API_KEY"],
+      "DebugModes": [],
+      "CommonVulnerabilities": ["API Key Leakage"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["vultr-cli"]
+    },
+    "Chef": {
+      "KnownRisk": "Chef server often exposes configuration and node run histories.",
+      "ConfigFiles": ["client.rb", "knife.rb"],
+      "Variables": [],
+      "CommonDirectories": ["cookbooks/", "roles/"],
+      "LogFiles": ["chef-client.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/organizations/_default"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["chef-client --log_level debug"],
+      "CommonVulnerabilities": ["Privilege Escalation"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["knife CLI"]
+    },
+    "Puppet": {
+      "KnownRisk": "Puppet manifests and Hiera often leak sensitive environment variables or secrets.",
+      "ConfigFiles": ["puppet.conf", "hiera.yaml"],
+      "Variables": [],
+      "CommonDirectories": ["manifests/", "modules/"],
+      "LogFiles": ["puppet.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/puppet/v3/catalog"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["puppet agent --debug"],
+      "CommonVulnerabilities": ["Secret Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Puppet Inspector"]
+    },
+    "HashiCorp Vault": {
+      "KnownRisk": "If the Vault root token or unseal keys leak, full secret compromise occurs.",
+      "ConfigFiles": ["vault.hcl"],
+      "Variables": ["VAULT_TOKEN"],
+      "CommonDirectories": ["/var/lib/vault/", "/etc/vault/"],
+      "LogFiles": ["vault_audit.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/v1/sys/"],
+      "EnvironmentVariables": ["VAULT_ADDR", "VAULT_TOKEN"],
+      "DebugModes": ["vault server -log-level=debug"],
+      "CommonVulnerabilities": ["Token Leakage", "Unsealed Vault"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["vault CLI"]
     }
   },
 
-  "OtherTechnologies": {
+  "6. Messaging / Queue / Streaming": {
     "RabbitMQ": {
       "KnownRisk": "Exposed management interfaces combined with default credentials can give unauthorized users control over message queues.",
       "ConfigFiles": ["rabbitmq.conf", "advanced.config"],
@@ -335,21 +822,51 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Default Credentials", "Management Interface Exposure"],
       "UsefulTools": ["rabbitmqadmin"]
     },
-
-    "Memcached": {
-      "KnownRisk": "Unauthenticated Memcached instances exposed to a network can reveal cached data or allow unintended data manipulation.",
-      "ConfigFiles": ["memcached.conf"],
-      "Variables": ["-m", "-p", "-u"],
-      "CommonDirectories": ["var/run/memcached/"],
-      "LogFiles": ["memcached.log"],
-      "BackupFiles": ["memcached.conf.bak"],
-      "ExposedEndpoints": ["Port 11211"],
-      "EnvironmentVariables": ["MEMCACHED_MEMORY", "MEMCACHED_PORT"],
-      "DebugModes": ["-vv"],
-      "CommonVulnerabilities": ["Unauthorized Access", "Data Dump Exposure"],
-      "UsefulTools": ["memcdump", "stats"]
+    "Kafka": {
+      "KnownRisk": "Unauthenticated Kafka brokers may expose full topic contents, enable producer spoofing, or cause message injection.",
+      "ConfigFiles": ["server.properties", "zookeeper.properties"],
+      "Variables": [],
+      "CommonDirectories": ["/var/lib/kafka/", "/etc/kafka/"],
+      "LogFiles": ["server.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["Port 9092"],
+      "EnvironmentVariables": ["KAFKA_HEAP_OPTS"],
+      "DebugModes": ["kafka-run-class DEBUG"],
+      "CommonVulnerabilities": ["Unauthenticated Access", "DoS"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Kafka Tool", "kafkacat"]
     },
+    "ActiveMQ": {
+      "KnownRisk": "Exposed admin console often leads to RCE via message deserialization.",
+      "ConfigFiles": ["activemq.xml", "jetty.xml"],
+      "Variables": [],
+      "CommonDirectories": ["conf/", "data/", "webapps/"],
+      "LogFiles": ["activemq.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/admin/", "Port 61616"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["activemq --debug"],
+      "CommonVulnerabilities": ["Deserialization RCE", "Admin Console Access"],
+      "DefaultCredentials": ["admin:admin"],
+      "UsefulTools": ["ActiveMQScanner"]
+    },
+    "ZeroMQ": {
+      "KnownRisk": "ZeroMQ by default offers no authentication or encryption; messages can be intercepted or forged.",
+      "ConfigFiles": ["*.cfg"],
+      "Variables": [],
+      "CommonDirectories": ["config/", "libzmq/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["tcp://*:5555"],
+      "EnvironmentVariables": [],
+      "DebugModes": [],
+      "CommonVulnerabilities": ["Message Injection", "Lack of Authentication"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["ZMQ Monitoring Scripts"]
+    }
+  },
 
+  "7. CI/CD / Dev Tools": {
     "Jenkins": {
       "KnownRisk": "Exposed script consoles or CLI endpoints can bypass traditional controls and allow administrative-level operations.",
       "ConfigFiles": ["config.xml", "credentials.xml", "jenkins.yaml"],
@@ -363,12 +880,198 @@ export const TECH_STACK_DATA: AppData = {
       "CommonVulnerabilities": ["Script Console RCE", "Open CLI"],
       "UsefulTools": ["jenkins-cli"]
     },
-
     "Git": {
       "KnownRisk": "Exposed .git directories can reveal complete source histories, internal credentials, and sensitive configuration files.",
       "CommonDirectories": [".git/", ".git/hooks/", ".git/objects/"],
       "ConfigFiles": [".git/config", ".gitignore"],
       "CommonVulnerabilities": ["Exposed .git directory"]
+    },
+    "GitLab_CI": {
+      "KnownRisk": "GitLab runners often expose tokens, environment variables, and artifacts containing secrets.",
+      "ConfigFiles": [".gitlab-ci.yml"],
+      "Variables": ["CI_JOB_TOKEN", "CI_REGISTRY_PASSWORD"],
+      "CommonDirectories": ["./.gitlab/", "./artifacts/", "./.cache/"],
+      "LogFiles": ["gitlab-runner.log"],
+      "BackupFiles": [".gitlab-ci.yml.bak"],
+      "ExposedEndpoints": ["/-/ci", "/api/v4/projects"],
+      "EnvironmentVariables": ["CI_*"],
+      "DebugModes": ["CI_DEBUG_TRACE=true"],
+      "CommonVulnerabilities": ["Token Exposure", "Pipeline RCE", "Privileged Runner Abuse"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["GitLab RCE exploit kits"]
+    },
+    "CircleCI": {
+      "KnownRisk": "Leaked environment variables often include cloud keys or API tokens.",
+      "ConfigFiles": ["config.yml"],
+      "Variables": ["CIRCLE_TOKEN", "CIRCLE_SHA1"],
+      "CommonDirectories": [".circleci/"],
+      "LogFiles": [],
+      "BackupFiles": ["config.yml.bak"],
+      "ExposedEndpoints": ["/api/v1.1/project"],
+      "EnvironmentVariables": ["CIRCLE_*"],
+      "DebugModes": ["circleci --verbose"],
+      "CommonVulnerabilities": ["Secret Leakage", "Artifact Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["CircleCI Analyzer"]
+    },
+    "TravisCI": {
+      "KnownRisk": "Travis build logs often leak environment secrets, tokens, and credentials.",
+      "ConfigFiles": [".travis.yml"],
+      "Variables": ["TRAVIS_TOKEN"],
+      "CommonDirectories": [".travis/"],
+      "LogFiles": ["build.log"],
+      "BackupFiles": [".travis.yml.bak"],
+      "ExposedEndpoints": ["/api/"],
+      "EnvironmentVariables": ["TRAVIS_*"],
+      "DebugModes": ["travis --debug"],
+      "CommonVulnerabilities": ["Secret Leakage", "Log Exposure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Travis Leak Scanners"]
+    },
+    "ArgoCD": {
+      "KnownRisk": "Misconfigured ArgoCD APIs can allow attackers to deploy workloads or read cluster secrets.",
+      "ConfigFiles": ["argocd-cm.yaml", "repositories.yaml"],
+      "Variables": [],
+      "CommonDirectories": ["~/.argocd/", "configs/"],
+      "LogFiles": ["argocd-server.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/api/v1/", "/applications"],
+      "EnvironmentVariables": ["ARGOCD_AUTH_TOKEN"],
+      "DebugModes": ["argocd --grpc-web --loglevel debug"],
+      "CommonVulnerabilities": ["Repo Credential Leakage", "Cluster Takeover"],
+      "DefaultCredentials": ["admin:password (common default)"],
+      "UsefulTools": ["argocd CLI"]
+    },
+    "Flux": {
+      "KnownRisk": "Flux may expose Git repo credentials via Kubernetes Secrets.",
+      "ConfigFiles": ["gotk-components.yaml"],
+      "Variables": [],
+      "CommonDirectories": ["flux-system/"],
+      "LogFiles": ["flux.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/metrics"],
+      "EnvironmentVariables": ["GIT_AUTH"],
+      "DebugModes": ["flux --log-level debug"],
+      "CommonVulnerabilities": ["Secret Exposure", "Pipeline Hijacking"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["flux CLI"]
+    }
+  },
+
+  "8. Cloud Services / Storage": {
+    "MinIO": {
+      "KnownRisk": "MinIO admin UI frequently exposed, allowing full S3-compatible access.",
+      "ConfigFiles": ["minio.json"],
+      "Variables": [],
+      "CommonDirectories": ["/root/.minio/"],
+      "LogFiles": ["minio.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/minio/", "/minio/admin"],
+      "EnvironmentVariables": ["MINIO_ACCESS_KEY", "MINIO_SECRET_KEY"],
+      "DebugModes": ["minio server --verbose"],
+      "CommonVulnerabilities": ["Unauthorized Access", "S3 Bucket Enumeration"],
+      "DefaultCredentials": ["minioadmin:minioadmin"],
+      "UsefulTools": ["mc (MinIO client)"]
+    },
+    "Firebase": {
+      "KnownRisk": "Misconfigured Firestore rules allow public read/write access to entire databases.",
+      "ConfigFiles": ["firebase.json"],
+      "Variables": [],
+      "CommonDirectories": [".firebase/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/.well-known/assetlinks.json"],
+      "EnvironmentVariables": ["FIREBASE_TOKEN"],
+      "DebugModes": ["firebase --debug"],
+      "CommonVulnerabilities": ["Insecure Firestore Rules", "Token Leakage"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Firestore scanner"]
+    },
+    "Supabase": {
+      "KnownRisk": "Supabase anon and service keys often leak in frontend JS bundles.",
+      "ConfigFiles": ["supabase/config.toml"],
+      "Variables": [],
+      "CommonDirectories": ["supabase/"],
+      "LogFiles": [],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/auth/v1/", "/rest/v1/"],
+      "EnvironmentVariables": ["SUPABASE_URL", "SUPABASE_KEY"],
+      "DebugModes": [],
+      "CommonVulnerabilities": ["Hardcoded Keys", "Public RLS Bypass"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Supabase Inspector"]
+    }
+  },
+
+  "9. Search / Analytics": {
+    "Elasticsearch": {
+      "KnownRisk": "Unauthenticated API endpoints can expose cluster operations and data, and insecure plugin systems may allow unintended behavior.",
+      "ConfigFiles": ["elasticsearch.yml", "jvm.options"],
+      "Variables": ["cluster.name", "node.name"],
+      "CommonDirectories": ["/var/lib/elasticsearch/", "/etc/elasticsearch/"],
+      "LogFiles": ["elasticsearch.log"],
+      "BackupFiles": ["*.json.bak"],
+      "ExposedEndpoints": ["/_cat", "/_search", "/_cluster"],
+      "EnvironmentVariables": ["ES_JAVA_OPTS"],
+      "DebugModes": ["logger.level=debug"],
+      "CommonVulnerabilities": ["Unauthenticated API Access", "RCE via Plugins"],
+      "UsefulTools": ["ElasticDump"]
+    },
+    "Solr": {
+      "KnownRisk": "Misconfigured Solr cores allow remote code execution and full index access.",
+      "ConfigFiles": ["solr.xml", "solrconfig.xml"],
+      "Variables": [],
+      "CommonDirectories": ["server/solr/", "data/"],
+      "LogFiles": ["solr.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/solr/admin/", "/solr/#/"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["SOLR_LOG_LEVEL=DEBUG"],
+      "CommonVulnerabilities": ["RCE", "Misconfiguration"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Solr Exploit Tools"]
+    },
+    "Prometheus": {
+      "KnownRisk": "Exposed metrics endpoints reveal OS, service versions, and Kubernetes internal info.",
+      "ConfigFiles": ["prometheus.yml"],
+      "Variables": [],
+      "CommonDirectories": ["./prometheus/", "/etc/prometheus/"],
+      "LogFiles": ["prometheus.log"],
+      "BackupFiles": ["prometheus.yml.bak"],
+      "ExposedEndpoints": ["/metrics", "/graph"],
+      "EnvironmentVariables": [],
+      "DebugModes": ["--log.level=debug"],
+      "CommonVulnerabilities": ["Info Leakage"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["PromQL explorer"]
+    },
+    "Grafana": {
+      "KnownRisk": "Weak or default admin passwords commonly lead to dashboard takeover.",
+      "ConfigFiles": ["grafana.ini"],
+      "Variables": [],
+      "CommonDirectories": ["/var/lib/grafana/", "/etc/grafana/"],
+      "LogFiles": ["grafana.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/login", "/api/"],
+      "EnvironmentVariables": ["GF_SECURITY_ADMIN_PASSWORD"],
+      "DebugModes": ["GF_LOG_LEVEL=debug"],
+      "CommonVulnerabilities": ["Weak Credentials", "API Abuse"],
+      "DefaultCredentials": ["admin:admin"],
+      "UsefulTools": ["Grafana exploit scripts"]
+    },
+    "Kibana": {
+      "KnownRisk": "Older Kibana versions exposed unauthenticated APIs allowing data exfiltration.",
+      "ConfigFiles": ["kibana.yml"],
+      "Variables": [],
+      "CommonDirectories": ["/etc/kibana/", "/usr/share/kibana/"],
+      "LogFiles": ["kibana.log"],
+      "BackupFiles": [],
+      "ExposedEndpoints": ["/api/status", "/app/kibana"],
+      "EnvironmentVariables": ["KIBANA_ENV"],
+      "DebugModes": ["--logging.verbose"],
+      "CommonVulnerabilities": ["Information Disclosure"],
+      "DefaultCredentials": [],
+      "UsefulTools": ["Elastic Stack Analysis Tools"]
     }
   }
 };

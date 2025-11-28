@@ -15,7 +15,12 @@ import {
   Check,
   Download,
   ArrowLeft,
-  AlertTriangle
+  AlertTriangle,
+  Cloud,
+  GitBranch,
+  MessageSquare,
+  BarChart,
+  HardDrive
 } from 'lucide-react';
 import { TECH_STACK_DATA } from './constants';
 import { Breadcrumbs } from './components/Breadcrumbs';
@@ -25,11 +30,15 @@ import { TechDetails } from './types';
 // --- Utilities ---
 const getCategoryIcon = (name: string) => {
   const lower = name.toLowerCase();
-  if (lower.includes('database')) return <Database className="w-7 h-7" />;
-  if (lower.includes('server')) return <Server className="w-7 h-7" />;
-  if (lower.includes('framework')) return <Layers className="w-7 h-7" />;
-  if (lower.includes('app')) return <Box className="w-7 h-7" />;
-  if (lower.includes('other')) return <Terminal className="w-7 h-7" />;
+  if (lower.includes('application stacks')) return <Box className="w-7 h-7" />;
+  if (lower.includes('web servers')) return <Server className="w-7 h-7" />;
+  if (lower.includes('databases')) return <Database className="w-7 h-7" />;
+  if (lower.includes('frameworks')) return <Layers className="w-7 h-7" />;
+  if (lower.includes('container') || lower.includes('devops')) return <Cloud className="w-7 h-7" />;
+  if (lower.includes('messaging')) return <MessageSquare className="w-7 h-7" />;
+  if (lower.includes('ci/cd')) return <GitBranch className="w-7 h-7" />;
+  if (lower.includes('cloud services')) return <HardDrive className="w-7 h-7" />;
+  if (lower.includes('search')) return <BarChart className="w-7 h-7" />;
   return <Code className="w-7 h-7" />;
 };
 
@@ -41,7 +50,7 @@ const Footer = () => (
   <footer className="mt-20 py-8 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-base text-slate-500">
       <div className="flex items-center gap-2 mb-4 md:mb-0">
-        <span className="font-bold text-brand-purple">TechStack Lens</span>
+        <span className="font-bold text-brand-purple">Tech Artefacts</span>
         <span>v1.0.0 (POC)</span>
       </div>
       <div className="flex gap-6">
@@ -61,7 +70,7 @@ const HomePage = () => {
     <div className="animate-fade-in">
       <div className="text-center py-24 px-4">
         <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-8">
-          Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-purple to-brand-green">Tech Artifacts</span>
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-purple to-brand-green">Tech Artifacts</span>
         </h1>
         <p className="max-w-3xl mx-auto text-xl text-slate-600 dark:text-slate-300 mb-12 leading-relaxed">
           A comprehensive reference for configuration files, exposed endpoints, environment variables, and vulnerabilities across modern technology stacks.
