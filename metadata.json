@@ -1,0 +1,5 @@
+{
+  "name": "TechStack Lens",
+  "description": "A modern, interactive viewer for exploring technology stack artifacts, configurations, and vulnerabilities.",
+  "requestFramePermissions": []
+}
